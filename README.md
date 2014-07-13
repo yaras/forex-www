@@ -17,7 +17,7 @@ Currently project can render very simple hardcoded chart with hardcoded single i
 
 Current version: **0.0.1**
 
-This project will be versioning according to [semantic versioning]('http://semver.org').
+This project will be versioning according to [semantic versioning](http://semver.org).
 
 ## Roadmap:
 
