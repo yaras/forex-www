@@ -8,10 +8,17 @@
 		<script type="text/javascript" src="chartViewModel.js"></script>
 		<script type="text/javascript" src="candleViewModel.js"></script>
 
-		<script type="text/javascript">
-			var chartViewModel = new ChartViewModel();
+		<style type="text/css">
+			.chart {
+				border: 1px solid;
+				height: 500px;
+				width: 850px;
+			}
+		</style>
 
+		<script type="text/javascript">
 			$(function() {
+				var chartViewModel = new ChartViewModel('.chart');
 				ko.applyBindings(chartViewModel);
 				chartViewModel.addCandles(candles);
 			});
@@ -23,7 +30,7 @@
 		<table>
 			<tr>
 				<td>
-					<div style="border 1px solid" data-bind="{ style: { border: '1px solid black', height: height, width: width } }">
+					<div class="chart">
 						<svg>
 							<!-- ko foreach: verticalAxe -->
 								<rect style="fill: #ddd" x="0" height="1" width="800" data-bind="attr: { y: y }"></rect>
@@ -49,7 +56,7 @@
 
 									<rect style="fill: black" width="1" data-bind="{attr: { x: shadowX, y: shadowY, height: shadowHeight }}"></rect>
 
-									<rect data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight, width: 6 }}"></rect>
+									<rect width="6" data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight }}"></rect>
 								</g>
 							<!-- /ko -->
 						</svg>

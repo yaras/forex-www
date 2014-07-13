@@ -1,8 +1,10 @@
-function ChartViewModel() {
+function ChartViewModel(obj) {
 	var self = this;
 
-	self.height = ko.observable(500);
-	self.width = ko.observable(850);
+	self.$chart = $(obj);
+
+	self.height = self.$chart.height();
+	self.width = self.$chart.width();
 
 	self.max = ko.observable();
 	self.min = ko.observable();
@@ -35,7 +37,7 @@ function ChartViewModel() {
 		self.min(local_min);
 		self.max(local_max);
 
-		self.f = self.height() / (self.max() - self.min())
+		self.f = self.height / (self.max() - self.min())
 
 		var path = [];
 
