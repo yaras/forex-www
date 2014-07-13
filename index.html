@@ -11,14 +11,18 @@
 		<style type="text/css">
 			.chart {
 				border: 1px solid;
-				height: 500px;
-				width: 850px;
+			}
+
+			.drawing {
+				cursor: crosshair;
 			}
 		</style>
 
 		<script type="text/javascript">
+			var chartViewModel = '';
+
 			$(function() {
-				var chartViewModel = new ChartViewModel('.chart');
+				chartViewModel = new ChartViewModel('.chart');
 				ko.applyBindings(chartViewModel);
 				chartViewModel.addCandles(candles);
 			});
@@ -30,8 +34,11 @@
 		<table>
 			<tr>
 				<td>
-					<div class="chart">
+					<div class="chart" style="height: 500px; width: 850px" data-bind="css: { 'drawing': mode() != 'none' }">
 						<svg>
+							<rect style="fill: gray" width="800" height="1" x="0" data-bind="attr: { y: cursorY }"></rect>
+							<rect style="fill: gray" width="1" height="500" y="0" data-bind="attr: { x: cursorX }"></rect>
+
 							<!-- ko foreach: verticalAxe -->
 								<rect style="fill: #ddd" x="0" height="1" width="800" data-bind="attr: { y: y }"></rect>
 								<g data-bind="attr: { transform: transform }">
@@ -59,6 +66,22 @@
 									<rect width="6" data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight }}"></rect>
 								</g>
 							<!-- /ko -->
+
+							<!-- ko foreach: helperRects -->
+								<rect fill="rgba(255, 255, 0, 0.7)" data-bind="attr: { x: x, y: y, height: height, width: width }"></rect>
+							<!-- /ko -->
+
+							<!-- ko foreach: helperLines -->
+								<line style="stroke:rgba(0, 0, 0, 0.7); stroke-width:1" data-bind="attr: { x1: x1, y1: y1, x2: x2, y2: y2 }"></line>
+							<!-- /ko -->
+
+							<!-- ko if: mode() == 'rect-stop' -->
+								<rect fill="rgba(255, 255, 0, 0.8)" data-bind="attr: { x: drawFirstX, y: drawFirstY, height: drawHeight, width: drawWidth }"></rect>
+							<!-- /ko -->
+
+							<!-- ko if: mode() == 'line-stop' -->
+								<line style="stroke:rgba(0,0,0, 0.8);stroke-width:1" data-bind="attr: { x1: drawFirstX, y1: drawFirstY, x2: drawSecondX, y2: drawSecondY }"></line>
+							<!-- /ko -->
 						</svg>
 					</div>	
 				</td>
@@ -75,7 +98,14 @@
 						<br />
 						close: <span data-bind="text: selected().close"></span>
 					</div>
+
+					<br />
+					value: <span data-bind="text: cursorValue()"></span>
 				</td>
 			</tr>
+		</table>
+
+		<button data-bind="click: drawRect">Draw rect</button>
+		<button data-bind="click: drawLine">Draw line</button>
 	</body>
 </html>
