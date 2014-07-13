@@ -1,0 +1,273 @@
+<html>
+	<head>
+		<title>chart</title>
+
+		<script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="knockout-3.1.0.js"></script>
+
+		<script type="text/javascript">
+			function ChartViewModel() {
+				var self = this;
+
+				self.height = ko.observable(500);
+				self.width = ko.observable(850);
+
+				self.max = ko.observable();
+				self.min = ko.observable();
+				
+				self.candleWidth = 10;
+
+				self.candles = ko.observableArray();
+
+				self.verticalAxe = ko.observableArray();
+				self.horizontalAxe = ko.observableArray();
+
+				self.chartIndicators = ko.observableArray();
+
+				self.selected = ko.observable();
+
+				self.addCandles = function(candles) {					
+					local_min = candles[0][2];
+					local_max = candles[0][1];
+
+					for (i = 0; i <= candles.length - 1; i++) {
+						if (candles[i][2] < local_min) {
+							local_min = candles[i][2];
+						}
+
+						if (candles[i][1] > local_max) {
+							local_max = candles[i][1];
+						}
+					}
+
+					self.min(local_min);
+					self.max(local_max);
+
+					self.f = self.height() / (self.max() - self.min())
+
+					var path = [];
+
+					for (i = 0; i <= candles.length - 1; i++) {
+						var c = new CandleViewModel(self, i+1, candles[i][0], candles[i][1], candles[i][2], candles[i][3], candles[i][4]);
+						self.candles.push(c);
+
+						if (i % 8 == 0) {
+							var x = 4 + self.candleWidth * i;
+							var t = 'translate(' + (x - 30) + ', 500)';
+
+							var date = '';
+
+							if (i > 0) {
+								date = candles[i][4];
+							}
+
+							self.horizontalAxe.push({ x: x, transform: t, date: date });
+						}
+
+						path.push((4 + self.candleWidth * (i + 1)) + ',' + (self.f * (self.max() - candles[i][1])));
+					}
+
+					self.chartIndicators.push({points: path.join(' ')});
+
+					var step = (self.max() - self.min()) / 30;
+
+					for (var i = self.min() + step; i < self.max() - step; i += step) {
+						var y = self.f * (self.max() - i);
+						var t = 'translate(' + 800 + ', ' + (y + (self.f * step)/10) + ')';
+
+						self.verticalAxe.push({ value: i.toFixed(4), y: y, transform: t });
+					}
+				}				
+			}
+
+			function CandleViewModel(chart, position, open, high, low, close, date) {
+				var self = this;
+				self.chart = chart;
+
+				self.date = date;
+
+				self.open = ko.observable(open);
+				self.close = ko.observable(close);
+				self.high = ko.observable(high);
+				self.low = ko.observable(low);
+
+				self.height = ko.observable(high - low);
+
+				self.shadowX = ko.observable(4 + self.chart.candleWidth * position);
+				self.shadowY = ko.observable(self.chart.f * (self.chart.max() - self.high()));
+
+				self.bodyX = ko.observable(2 + self.chart.candleWidth * position);
+				self.bodyY = ko.observable(self.chart.f * (self.chart.max() - Math.max(self.close(), self.open())));
+
+				self.shadowHeight = ko.observable(self.chart.f * (self.high() - self.low()));
+
+				self.bodyHeight = ko.observable(self.chart.f * Math.abs(self.close() - self.open()));
+
+				self.bodyStyle = ko.observable();
+
+				if (self.open() < self.close()) {
+					self.bodyStyle('fill:green');
+				} else {
+					self.bodyStyle('fill:red');
+				}
+
+				self.candleStyle = ko.observable('fill: none');
+
+				self.setSelected = function() {
+					self.chart.selected(self);
+					self.candleStyle('fill-opacity: 0.3; fill: blue');
+				};
+
+				self.setUnselected = function() {
+					self.candleStyle('fill: none');
+				};
+			}
+
+			var chartViewModel = new ChartViewModel();
+
+			$(function() {
+				ko.applyBindings(chartViewModel);				
+
+				// open, high, low, close
+				chartViewModel.addCandles([
+					[1.2267,1.2323,1.2255,1.2312, '02-03 14:50'],
+					[1.2312,1.2333,1.2235,1.2249, '02-03 15:50'],
+					[1.2249,1.2296,1.2213,1.2238, '02-03 16:50'],
+					[1.2239,1.2247,1.2166,1.2202, '02-03 17:50'],
+					[1.2202,1.2256,1.2162,1.2240, '02-03 18:50'],
+					[1.2269,1.2289,1.2175,1.2272, '02-03 19:50'],
+					[1.2271,1.2316,1.2188,1.2294, '02-03 20:50'],
+					[1.2294,1.2305,1.2216,1.2282, '02-03 21:50'],
+					[1.2283,1.2322,1.2228,1.2280, '02-03 22:50'],
+					[1.2280,1.2282,1.2144,1.2156, '02-03 23:50'],
+					[1.2126,1.2144,1.2067,1.2116, '02-04 00:50'],
+					[1.2116,1.2137,1.2041,1.2058, '02-04 01:50'],
+					[1.2059,1.2169,1.2053,1.2157, '02-04 02:50'],
+					[1.2157,1.2328,1.2117,1.2282, '02-04 03:50'],
+					[1.2282,1.2389,1.2241,1.2299, '02-04 04:50'],
+					[1.2298,1.2310,1.2225,1.2260, '02-04 05:50'],
+					[1.2259,1.2329,1.2248,1.2302, '02-04 06:50'],
+					[1.2303,1.2336,1.2218,1.2224, '02-04 07:50'],
+					[1.2224,1.2404,1.2133,1.2179, '02-04 08:50'],
+					[1.2179,1.2391,1.2166,1.2380, '02-04 09:50'],
+					[1.2397,1.2442,1.2341,1.2399, '02-04 10:50'],
+					[1.2399,1.2441,1.2375,1.2398, '02-04 11:50'],
+					[1.2398,1.2401,1.2326,1.2364, '02-04 12:50'],
+					[1.2364,1.2386,1.2266,1.2305, '02-04 13:50'],
+					[1.2305,1.2315,1.2241,1.2293, '02-04 14:50'],
+					[1.2290,1.2372,1.2260,1.2331, '02-04 15:50'],
+					[1.2331,1.2385,1.2316,1.2321, '02-04 16:50'],
+					[1.2321,1.2342,1.2264,1.2289, '02-04 17:50'],
+					[1.2289,1.2372,1.2256,1.2355, '02-04 18:50'],
+					[1.2355,1.2381,1.2288,1.2333, '02-04 19:50'],
+					[1.2346,1.2368,1.2295,1.2343, '02-04 20:50'],
+					[1.2344,1.2487,1.2342,1.2472, '02-04 21:50'],
+					[1.2471,1.2537,1.2431,1.2528, '02-04 22:50'],
+					[1.2528,1.2588,1.2523,1.2563, '02-04 23:50'],
+					[1.2563,1.2568,1.2482,1.2511, '02-05 00:50'],
+					[1.2512,1.2534,1.2490,1.2498, '02-05 01:50'],
+					[1.2498,1.2575,1.2464,1.2564, '02-05 02:50'],
+					[1.2398,1.2401,1.2326,1.2364, '02-04 12:50'],
+					[1.2364,1.2386,1.2266,1.2305, '02-04 13:50'],
+					[1.2305,1.2315,1.2241,1.2293, '02-04 14:50'],
+					[1.2290,1.2372,1.2260,1.2331, '02-04 15:50'],
+					[1.2331,1.2385,1.2316,1.2321, '02-04 16:50'],
+					[1.2321,1.2342,1.2264,1.2289, '02-04 17:50'],
+					[1.2289,1.2372,1.2256,1.2355, '02-04 18:50'],
+					[1.2355,1.2381,1.2288,1.2333, '02-04 19:50'],
+					[1.2346,1.2368,1.2295,1.2343, '02-04 20:50'],
+					[1.2344,1.2487,1.2342,1.2472, '02-04 21:50'],
+					[1.2471,1.2537,1.2431,1.2528, '02-04 22:50'],
+					[1.2528,1.2588,1.2523,1.2563, '02-04 23:50'],
+					[1.2563,1.2568,1.2482,1.2511, '02-05 00:50'],
+					[1.2512,1.2534,1.2490,1.2498, '02-05 01:50'],
+					[1.2398,1.2401,1.2326,1.2364, '02-04 12:50'],
+					[1.2364,1.2386,1.2266,1.2305, '02-04 13:50'],
+					[1.2305,1.2315,1.2241,1.2293, '02-04 14:50'],
+					[1.2290,1.2372,1.2260,1.2331, '02-04 15:50'],
+					[1.2331,1.2385,1.2316,1.2321, '02-04 16:50'],
+					[1.2321,1.2342,1.2264,1.2289, '02-04 17:50'],
+					[1.2289,1.2372,1.2256,1.2355, '02-04 18:50'],
+					[1.2355,1.2381,1.2288,1.2333, '02-04 19:50'],
+					[1.2346,1.2368,1.2295,1.2343, '02-04 20:50'],
+					[1.2344,1.2487,1.2342,1.2472, '02-04 21:50'],
+					[1.2471,1.2537,1.2431,1.2528, '02-04 22:50'],
+					[1.2528,1.2588,1.2523,1.2563, '02-04 23:50'],
+					[1.2563,1.2568,1.2482,1.2511, '02-05 00:50'],
+					[1.2512,1.2534,1.2490,1.2498, '02-05 01:50'],
+					[1.2398,1.2401,1.2326,1.2364, '02-04 12:50'],
+					[1.2364,1.2386,1.2266,1.2305, '02-04 13:50'],
+					[1.2305,1.2315,1.2241,1.2293, '02-04 14:50'],
+					[1.2290,1.2372,1.2260,1.2331, '02-04 15:50'],
+					[1.2331,1.2385,1.2316,1.2321, '02-04 16:50'],
+					[1.2321,1.2342,1.2264,1.2289, '02-04 17:50'],
+					[1.2289,1.2372,1.2256,1.2355, '02-04 18:50'],
+					[1.2355,1.2381,1.2288,1.2333, '02-04 19:50'],
+					[1.2346,1.2368,1.2295,1.2343, '02-04 20:50'],
+					[1.2344,1.2487,1.2342,1.2472, '02-04 21:50'],
+					[1.2471,1.2537,1.2431,1.2528, '02-04 22:50'],
+					[1.2528,1.2588,1.2523,1.2563, '02-04 23:50'],
+					[1.2563,1.2568,1.2482,1.2511, '02-05 00:50']
+				]);
+			});
+		</script>
+	</head>
+
+	<body>
+		
+		<table>
+			<tr>
+			<td>
+<div style="border 1px solid" data-bind="{ style: { border: '1px solid black', height: height, width: width } }">
+			<svg>
+				<!-- ko foreach: verticalAxe -->
+					<rect style="fill: #ddd" x="0" height="1" width="800" data-bind="attr: { y: y }"></rect>
+					<g data-bind="attr: { transform: transform }">
+						<text style="font-size: 9pt" data-bind="text: value"></text>
+					</g>
+				<!-- /ko -->
+
+				<!-- ko foreach: horizontalAxe -->
+					<rect style="fill: #ddd" y="0" height="500" width="1" data-bind="attr: { x: x }"></rect>
+					<g data-bind="attr: { transform: transform }">
+						<text style="font-size: 9pt" data-bind="text: date"></text>
+					</g>
+				<!-- /ko -->
+
+				<!-- ko foreach: chartIndicators -->
+					<polyline style="fill:none; stroke: red; stroke-width:1" data-bind="attr: {points: points}"></polyline>
+				<!-- /ko -->
+
+				<!-- ko foreach: candles -->					
+					<g data-bind="event: { mouseover: setSelected, mouseout: setUnselected }">
+						<rect style="fill: none" data-bind="attr: { style: candleStyle, x: shadowX() - 4, height: shadowHeight, width: 10, y: shadowY }"></rect>
+
+						<rect style="fill: black" width="1" data-bind="{attr: { x: shadowX, y: shadowY, height: shadowHeight }}"></rect>
+
+						<rect data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight, width: 6 }}"></rect>
+					</g>
+				<!-- /ko -->
+			</svg>
+		</div>	
+			</td>
+
+				<td>
+<div data-bind="if: selected">
+			date: <span data-bind="text: selected().date"></span>
+			<br />
+			open: <span data-bind="text: selected().open"></span>
+			<br />
+			high: <span data-bind="text: selected().high"></span>
+			<br />
+			low: <span data-bind="text: selected().low"></span>
+			<br />
+			close: <span data-bind="text: selected().close"></span>
+		</div>
+				</td>
+			</tr>
+
+		
+
+			
+	</body>
+</html>
