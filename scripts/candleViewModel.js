@@ -10,11 +10,12 @@ function CandleViewModel(chart, position, open, high, low, close, date) {
 	self.low = ko.observable(low);
 
 	self.height = ko.observable(high - low);
+	self.width = ko.observable(Constants.candleBodyWidth);
 
-	self.shadowX = ko.observable(4 + self.chart.candleWidth * position);
+	self.shadowX = ko.observable(Constants.candleWidth * position);
 	self.shadowY = ko.observable(self.chart.f * (self.chart.max() - self.high()));
 
-	self.bodyX = ko.observable(2 + self.chart.candleWidth * position);
+	self.bodyX = ko.observable(-(Constants.candleBodyWidth-1)/2 + Constants.candleWidth * position);
 	self.bodyY = ko.observable(self.chart.f * (self.chart.max() - Math.max(self.close(), self.open())));
 
 	self.shadowHeight = ko.observable(self.chart.f * (self.high() - self.low()));

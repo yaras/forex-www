@@ -1,55 +1,51 @@
 <html>
 	<head>
-		<title>chart</title>
+		<meta charset="utf-8">
+		<title>Chart</title>
 
-		<script type="text/javascript" src="jquery-2.1.1.min.js"></script>
-		<script type="text/javascript" src="knockout-3.1.0.js"></script>
-		<script type="text/javascript" src="candles.js"></script>
-		<script type="text/javascript" src="chartViewModel.js"></script>
-		<script type="text/javascript" src="candleViewModel.js"></script>
+		<link href="styles/styles.css" rel="stylesheet" type="text/css" media="all" />
 
-		<style type="text/css">
-			.chart {
-				border: 1px solid;
-			}
+		<script type="text/javascript" src="scripts/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="scripts/knockout-3.1.0.js"></script>
+		<script type="text/javascript" src="scripts/helpers.js"></script>
+		<script type="text/javascript" src="scripts/candles.js"></script>
+		<script type="text/javascript" src="scripts/chartViewModel.js"></script>
+		<script type="text/javascript" src="scripts/candleViewModel.js"></script>
 
-			.drawing {
-				cursor: crosshair;
-			}
-		</style>
+		<script type="text/javascript" src="scripts/chartViewModel.drawing.js"></script>
 
 		<script type="text/javascript">
 			var chartViewModel = '';
 
 			$(function() {
-				chartViewModel = new ChartViewModel('.chart');
-				ko.applyBindings(chartViewModel);
+				chartViewModel = new ChartViewModel('.chart', '1D');
+
+				chartViewModel.init();
 				chartViewModel.addCandles(candles);
 			});
 		</script>
 	</head>
 
 	<body>
-		
 		<table>
 			<tr>
 				<td>
 					<div class="chart" style="height: 500px; width: 850px" data-bind="css: { 'drawing': mode() != 'none' }">
-						<svg>
+						<svg style="height: 500px; width: 850px">
 							<rect style="fill: gray" width="800" height="1" x="0" data-bind="attr: { y: cursorY }"></rect>
 							<rect style="fill: gray" width="1" height="500" y="0" data-bind="attr: { x: cursorX }"></rect>
 
 							<!-- ko foreach: verticalAxe -->
 								<rect style="fill: #ddd" x="0" height="1" width="800" data-bind="attr: { y: y }"></rect>
 								<g data-bind="attr: { transform: transform }">
-									<text style="font-size: 9pt" data-bind="text: value"></text>
+									<text style="font-size: 8pt" data-bind="text: value"></text>
 								</g>
 							<!-- /ko -->
 
 							<!-- ko foreach: horizontalAxe -->
 								<rect style="fill: #ddd" y="0" height="500" width="1" data-bind="attr: { x: x }"></rect>
 								<g data-bind="attr: { transform: transform }">
-									<text style="font-size: 9pt" data-bind="text: date"></text>
+									<text text-anchor="middle" style="font-size: 8pt" data-bind="text: date"></text>
 								</g>
 							<!-- /ko -->
 
@@ -63,7 +59,7 @@
 
 									<rect style="fill: black" width="1" data-bind="{attr: { x: shadowX, y: shadowY, height: shadowHeight }}"></rect>
 
-									<rect width="6" data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight }}"></rect>
+									<rect data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight, width: width }}"></rect>
 								</g>
 							<!-- /ko -->
 
