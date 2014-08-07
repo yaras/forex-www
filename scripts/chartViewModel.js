@@ -1,15 +1,20 @@
-function ChartViewModel(obj, resolution) {
+function ChartViewModel(settings) {
 	var self = this;
 
+	self.settings = $.extend({}, {}, settings);
+
 	//// chart resolution
-	self.resolution = resolution;
+	self.resolution = self.settings.resolution;
 
 	//// chart DOM element
-	self.$chart = $(obj);
+	self.$chart = $(self.settings.element);
 
 	//// chart DOM dimensions
-	self.height = self.$chart.height();
-	self.width = self.$chart.width();
+	self.height = self.settings.height;
+	self.width = self.settings.width;
+
+	self.heightWithMargin = self.height + Constants.chartHeightMargin;
+	self.widthWithMargin = self.width + Constants.chartWidthMargin;
 
 	self.cursorX = ko.observable();
 	self.cursorY = ko.observable();
@@ -48,7 +53,7 @@ function ChartViewModel(obj, resolution) {
 		self.attachDrawingEvents();
 	};
 
-	self.addCandles = function(candles) {					
+	self.addCandles = function(candles) {
 		local_min = candles[0][2];
 		local_max = candles[0][1];
 
@@ -77,7 +82,7 @@ function ChartViewModel(obj, resolution) {
 
 			if (i % 8 == 0) {
 				var x = Constants.candleWidth * (i+1);
-				var t = 'translate(' + x + ', 500)';
+				var t = 'translate(' + x + ', ' + (self.height + Constants.chartHeightMargin/2) + ')';
 
 				var date = '';
 
@@ -93,13 +98,13 @@ function ChartViewModel(obj, resolution) {
 
 		self.chartIndicators.push({points: path.join(' ')});
 
-		var step = (self.max() - self.min()) / 30;
+		var step = (self.max() - self.min()) / Constants.verticalStripesCount;
 
 		for (var i = self.min() + step; i < self.max() - step; i += step) {
 			var y = self.f * (self.max() - i);
-			var t = 'translate(' + 800 + ', ' + (y + (self.f * step)/10) + ')';
+			var t = 'translate(' + (self.settings.width + Constants.chartWidthMargin/5) + ', ' + (y + (self.f * step)/10) + ')';
 
 			self.verticalAxe.push({ value: i.toFixed(4), y: y, transform: t });
 		}
-	}				
+	}
 }

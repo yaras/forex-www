@@ -1,7 +1,10 @@
 var Constants = function() {
 	return {
 		'candleWidth': 10,
-		'candleBodyWidth': 5
+		'candleBodyWidth': 5,
+		'chartHeightMargin': 30,
+		'chartWidthMargin': 50,
+		'verticalStripesCount': 30
 	};
 }();
 
@@ -32,17 +35,16 @@ var Dates = function() {
 	};
 
 	pub.format = function(d, resolution) {
-        switch (resolution) {
-            case '1D':
-                //return Helpers.pad(d.getDate(), 2) + '.' + Helpers.pad(d.getMonth()+1, 2);
-                return d.getFullYear() + '-' + Helpers.pad(d.getMonth()+1, 2) + '-' + Helpers.pad(d.getDate(), 2);
-                
-            case '1H':
-                return Helpers.pad(d.getHours(), 2) + ':' + Helpers.pad(d.getMinutes(), 2);
-                
-            default:
-                console.error('Unknown resolution: ' + resolution);
-        }
+		switch (resolution) {
+			case '1D':
+				return d.getFullYear() + '-' + Helpers.pad(d.getMonth()+1, 2) + '-' + Helpers.pad(d.getDate(), 2);
+
+			case '1H':
+				return Helpers.pad(d.getHours(), 2) + ':' + Helpers.pad(d.getMinutes(), 2);
+
+			default:
+				console.error('Unknown resolution: ' + resolution);
+		}
 	};
 
 	return pub;
