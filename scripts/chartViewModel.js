@@ -88,7 +88,7 @@ function ChartViewModel(obj, resolution) {
 				self.horizontalAxe.push({ x: x, transform: t, date: date });
 			}
 
-			path.push((Constants.horizontalMargin + Constants.candleWidth * (i + 1)) + ',' + (self.f * (self.max() - candles[i][1])));
+			path.push((Constants.candleWidth * (i + 1)) + ',' + (self.f * (self.max() - candles[i][1])));
 		}
 
 		self.chartIndicators.push({points: path.join(' ')});
