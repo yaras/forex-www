@@ -1,17 +1,17 @@
 Forex-www
 =========
 
-Interactive analysis of candlestick charts.
+Forex-www is a pure JavaScript library for technical analysis of candlestick charts. It gets array of candlestick and draw a chart using SVG. It is capable of drawing indicators (as for now only on chart, not below chart). Forex-www allows to draw custom shapes on chart like rects, lines and fibo lines. 
 
-## Purpose
-
-Purpose of this project is to provide interactive and user friendly interface for candlestick chart analysis. 
+Read more and view **demo** on [github.io](http://yaras.github.com/forex-www)
 
 ## Status
 
 As for now project gives you almost **no** functionality at all and it cannot be used for any reasonable purpose. 
 
-Currently project can render very simple hardcoded chart with hardcoded single indicator as for Prove of Concept.
+## Licence
+
+Forex-www is licensed under [MIT](http://opensource.org/licenses/MIT)
 
 ## Version
 
@@ -21,16 +21,11 @@ This project will be versioning according to [semantic versioning](http://semver
 
 ## Roadmap:
 
-* Create Javascript frontend using SVG:
- * Simple candlestick chart
- * Axes
- * Indicators on chart
- * Indicators below chart
- * Price Action indicators (arrows, S/R lines, trends etc.)
-* Create PHP backend for storing user indicators
- * Create REST controller for storing data
-
-## What would not be available (as for now):
-
-* Automated downloading candlestick data
-* Automated analysis (calculation indicator values)
+* Simple candlestick chart
+* Axes
+* Indicators on chart
+* Indicators below chart
+* Price Action indicators (arrows, S/R lines, trends, Fibo lines etc.)
+* Serialization and deserialization
+* Callback events (added drawing, removed drawing etc.)
+* Edition of drawings
