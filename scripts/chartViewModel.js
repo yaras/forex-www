@@ -22,11 +22,7 @@ function ChartViewModel(settings) {
 	self.cursorValue = ko.observable();
 
 	self.drawX = -1;
-	self.drawY = -1;
-
-	self.helperRects = ko.observableArray();
-	self.helperLines = ko.observableArray();
-	self.helperFibo = ko.observableArray();
+	self.drawY = -1;	
 
 	self.max = ko.observable();
 	self.min = ko.observable();
