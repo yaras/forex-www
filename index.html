@@ -80,7 +80,23 @@
 								<!-- /ko -->
 
 								<!-- ko foreach: helperFibo -->
+									<g data-bind="attr: { transform: transform }">
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y: level0 }" ></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level23 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level38 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level50 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level62 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level79 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level100 }"></rect>
 
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y: level0 }">0%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level23 }">23%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level38 }">38%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level50 }">50%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level62 }">62%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level79 }">79%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level100 }">100%</text>
+									</g>
 								<!-- /ko -->
 
 								<!-- ko if: mode() == 'rect-stop' -->
@@ -92,20 +108,22 @@
 								<!-- /ko -->
 
 								<!-- ko if: mode() == 'fibo-stop' -->
-									<g transform="translate(100, 150)">
-										<rect x="0" y="0" height="1" width="150" style="fill: gray"></rect>
-										<rect x="0" y="46" height="1" width="150" style="fill: gray"></rect>
-										<rect x="0" y="76" height="1" width="150" style="fill: gray"></rect>
-										<rect x="0" y="100" height="1" width="150" style="fill: gray"></rect>
-										<rect x="0" y="124" height="1" width="150" style="fill: gray"></rect>
-										<rect x="0" y="200" height="1" width="150" style="fill: gray"></rect>
+									<g data-bind="attr: { transform: drawing.transform }">
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y: drawing.level0 }" ></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level23 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level38 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level50 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level62 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level79 }"></rect>
+										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level100 }"></rect>
 
-										<text x="130" y="0" text-anchor="right" style="font-size: 8pt">0%</text>
-										<text x="130" y="46" text-anchor="right" style="font-size: 8pt">23%</text>
-										<text x="130" y="76" text-anchor="right" style="font-size: 8pt">48%</text>
-										<text x="130" y="100" text-anchor="right" style="font-size: 8pt">50%</text>
-										<text x="130" y="124" text-anchor="right" style="font-size: 8pt">62%</text>
-										<text x="130" y="200" text-anchor="right" style="font-size: 8pt">100%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y: drawing.level0 }">0%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level23 }">23%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level38 }">38%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level50 }">50%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level62 }">62%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level79 }">79%</text>
+										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level100 }">100%</text>
 									</g>
 								<!-- /ko -->
 							</g>

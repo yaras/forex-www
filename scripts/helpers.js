@@ -4,7 +4,8 @@ var Constants = function() {
 		'candleBodyWidth': 5,
 		'chartHeightMargin': 30,
 		'chartWidthMargin': 50,
-		'verticalStripesCount': 30
+		'verticalStripesCount': 30,
+		'fiboLabelRightMargin': 30
 	};
 }();
 

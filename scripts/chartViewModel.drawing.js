@@ -1,9 +1,7 @@
 ChartViewModel.prototype.attachDrawingEvents = function() {
 	var self = this;
 
-	self.drawing = {
-		fibo: null
-	};
+	self.drawing = {};
 
 	self.$chart.mousemove(function(event) {
 		var parentOffset = $(this).parent().offset(); 
@@ -50,7 +48,7 @@ ChartViewModel.prototype.attachDrawingEvents = function() {
 			self.drawSecondX(x);
 			self.drawSecondY(y);
 		} else if (self.mode() == 'fibo-stop') {
-			self.drawing.fibo.updatePosition(x, y);
+			self.drawing.updatePosition(x, y);
 		}
 	});
 
@@ -76,9 +74,13 @@ ChartViewModel.prototype.attachDrawingEvents = function() {
 			} else if (self.mode() == 'line-stop') {
 				self.storeLine();
 			} else if (self.mode() == 'fibo-start') {
-				self.drawing.fibo = new FiboViewModel(x, y);
+				self.drawing = new FiboViewModel(self, x, y);
+				self.mode('fibo-stop');
+				console.log('fibo-start');
 			} else if (self.mode() == 'fibo-stop') {
-
+				self.drawing.stop(x, y);
+				self.drawing = null;
+				self.mode('none');
 			}
 		}
 	});	
