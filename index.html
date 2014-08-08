@@ -11,8 +11,8 @@
 		<script type="text/javascript" src="scripts/candles.js"></script>
 		<script type="text/javascript" src="scripts/chartViewModel.js"></script>
 		<script type="text/javascript" src="scripts/candleViewModel.js"></script>
-
 		<script type="text/javascript" src="scripts/chartViewModel.drawing.js"></script>
+		<script type="text/javascript" src="scripts/fiboViewModel.js"></script>
 
 		<link rel="shortcut icon" href="icons/combo-16.png" type="image/x-icon" /> 
 
@@ -52,7 +52,7 @@
 									<text text-anchor="middle" style="font-size: 8pt" data-bind="text: date"></text>
 								</g>
 							<!-- /ko -->
-							
+
 							<g>
 								<rect style="fill: gray" height="1" x="0" data-bind="attr: { y: cursorY, width: width }"></rect>
 								<rect style="fill: gray" width="1" y="0" data-bind="attr: { x: cursorX, height: height }"></rect>
@@ -79,12 +79,34 @@
 									<line style="stroke:rgba(0, 0, 0, 0.7); stroke-width:1" data-bind="attr: { x1: x1, y1: y1, x2: x2, y2: y2 }"></line>
 								<!-- /ko -->
 
+								<!-- ko foreach: helperFibo -->
+
+								<!-- /ko -->
+
 								<!-- ko if: mode() == 'rect-stop' -->
 									<rect fill="rgba(255, 255, 0, 0.8)" data-bind="attr: { x: drawFirstX, y: drawFirstY, height: drawHeight, width: drawWidth }"></rect>
 								<!-- /ko -->
 
 								<!-- ko if: mode() == 'line-stop' -->
 									<line style="stroke:rgba(0,0,0, 0.8);stroke-width:1" data-bind="attr: { x1: drawFirstX, y1: drawFirstY, x2: drawSecondX, y2: drawSecondY }"></line>
+								<!-- /ko -->
+
+								<!-- ko if: mode() == 'fibo-stop' -->
+									<g transform="translate(100, 150)">
+										<rect x="0" y="0" height="1" width="150" style="fill: gray"></rect>
+										<rect x="0" y="46" height="1" width="150" style="fill: gray"></rect>
+										<rect x="0" y="76" height="1" width="150" style="fill: gray"></rect>
+										<rect x="0" y="100" height="1" width="150" style="fill: gray"></rect>
+										<rect x="0" y="124" height="1" width="150" style="fill: gray"></rect>
+										<rect x="0" y="200" height="1" width="150" style="fill: gray"></rect>
+
+										<text x="130" y="0" text-anchor="right" style="font-size: 8pt">0%</text>
+										<text x="130" y="46" text-anchor="right" style="font-size: 8pt">23%</text>
+										<text x="130" y="76" text-anchor="right" style="font-size: 8pt">48%</text>
+										<text x="130" y="100" text-anchor="right" style="font-size: 8pt">50%</text>
+										<text x="130" y="124" text-anchor="right" style="font-size: 8pt">62%</text>
+										<text x="130" y="200" text-anchor="right" style="font-size: 8pt">100%</text>
+									</g>
 								<!-- /ko -->
 							</g>
 						</svg>
@@ -112,5 +134,6 @@
 
 		<button data-bind="click: drawRect">Draw rect</button>
 		<button data-bind="click: drawLine">Draw line</button>
+		<button data-bind="click: drawFibo">Draw fibo</button>
 	</body>
 </html>

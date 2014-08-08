@@ -33,6 +33,7 @@ function ChartViewModel(settings) {
 
 	self.helperRects = ko.observableArray();
 	self.helperLines = ko.observableArray();
+	self.helperFibo = ko.observableArray();
 
 	self.max = ko.observable();
 	self.min = ko.observable();
