@@ -24,13 +24,6 @@ function ChartViewModel(settings) {
 	self.drawX = -1;
 	self.drawY = -1;
 
-	self.drawFirstX = ko.observable();
-	self.drawFirstY = ko.observable();
-	self.drawSecondX = ko.observable();
-	self.drawSecondY = ko.observable();
-	self.drawHeight = ko.observable();
-	self.drawWidth = ko.observable();
-
 	self.helperRects = ko.observableArray();
 	self.helperLines = ko.observableArray();
 	self.helperFibo = ko.observableArray();
@@ -50,8 +43,8 @@ function ChartViewModel(settings) {
 	self.mode = ko.observable('none');
 
 	self.init = function() {
-		ko.applyBindings(self);
 		self.attachDrawingEvents();
+		ko.applyBindings(self);
 	};
 
 	self.addCandles = function(candles) {

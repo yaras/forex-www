@@ -7,12 +7,15 @@
 
 		<script type="text/javascript" src="scripts/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript" src="scripts/knockout-3.1.0.js"></script>
+
 		<script type="text/javascript" src="scripts/helpers.js"></script>
 		<script type="text/javascript" src="scripts/candles.js"></script>
 		<script type="text/javascript" src="scripts/chartViewModel.js"></script>
 		<script type="text/javascript" src="scripts/candleViewModel.js"></script>
 		<script type="text/javascript" src="scripts/chartViewModel.drawing.js"></script>
 		<script type="text/javascript" src="scripts/fiboViewModel.js"></script>
+		<script type="text/javascript" src="scripts/lineViewModel.js"></script>
+		<script type="text/javascript" src="scripts/rectViewModel.js"></script>
 
 		<link rel="shortcut icon" href="icons/combo-16.png" type="image/x-icon" /> 
 
@@ -99,36 +102,38 @@
 									</g>
 								<!-- /ko -->
 
-								<!-- ko if: mode() == 'rect-stop' -->
-									<rect fill="rgba(255, 255, 0, 0.8)" data-bind="attr: { x: drawFirstX, y: drawFirstY, height: drawHeight, width: drawWidth }"></rect>
-								<!-- /ko -->
+								<!-- ko if: drawing() != null -->
+									<!-- ko if: drawing() instanceof RectViewModel -->
+										<rect fill="rgba(255, 255, 0, 0.8)" data-bind="attr: { x: drawing().drawFirstX, y: drawing().drawFirstY, height: drawing().drawHeight, width: drawing().drawWidth }"></rect>
+									<!-- /ko -->
 
-								<!-- ko if: mode() == 'line-stop' -->
-									<line style="stroke:rgba(0,0,0, 0.8);stroke-width:1" data-bind="attr: { x1: drawFirstX, y1: drawFirstY, x2: drawSecondX, y2: drawSecondY }"></line>
-								<!-- /ko -->
+									<!-- ko if: drawing() instanceof LineViewModel -->
+										<line style="stroke:rgba(0,0,0, 0.8);stroke-width:1" data-bind="attr: { x1: drawing().drawFirstX, y1: drawing().drawFirstY, x2: drawing().drawSecondX, y2: drawing().drawSecondY }"></line>
+									<!-- /ko -->
 
-								<!-- ko if: mode() == 'fibo-stop' -->
-									<g data-bind="attr: { transform: drawing.transform }">
-										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y: drawing.level0 }" ></rect>
-										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level23 }"></rect>
-										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level38 }"></rect>
-										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level50 }"></rect>
-										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level62 }"></rect>
-										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level79 }"></rect>
-										<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing.width, y:drawing.level100 }"></rect>
+									<!-- ko if: drawing() instanceof FiboViewModel -->
+										<g data-bind="attr: { transform: drawing().transform }">
+											<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y: drawing().level0 }" ></rect>
+											<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level23 }"></rect>
+											<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level38 }"></rect>
+											<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level50 }"></rect>
+											<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level62 }"></rect>
+											<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level79 }"></rect>
+											<rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level100 }"></rect>
 
-										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y: drawing.level0 }">0%</text>
-										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level23 }">23%</text>
-										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level38 }">38%</text>
-										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level50 }">50%</text>
-										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level62 }">62%</text>
-										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level79 }">79%</text>
-										<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing.width, x: drawing.labelXPosition, y:drawing.level100 }">100%</text>
-									</g>
+											<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y: drawing().level0 }">0%</text>
+											<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level23 }">23%</text>
+											<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level38 }">38%</text>
+											<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level50 }">50%</text>
+											<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level62 }">62%</text>
+											<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level79 }">79%</text>
+											<text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level100 }">100%</text>
+										</g>
+									<!-- /ko -->
 								<!-- /ko -->
 							</g>
 						</svg>
-					</div>	
+					</div>
 				</td>
 
 				<td>
