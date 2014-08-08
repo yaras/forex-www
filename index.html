@@ -39,9 +39,6 @@
 				<td>
 					<div class="chart" data-bind="css: { 'drawing': mode() != 'none' }, attr: {height: heightWithMargin, width: widthWithMargin}">
 						<svg data-bind="attr: {height: heightWithMargin, width: widthWithMargin}">
-							<rect style="fill: gray" height="1" x="0" data-bind="attr: { y: cursorY, width: width }"></rect>
-							<rect style="fill: gray" width="1" y="0" data-bind="attr: { x: cursorX, height: height }"></rect>
-
 							<!-- ko foreach: verticalAxe -->
 								<rect style="fill: #ddd" x="0" height="1" data-bind="attr: { y: y, width: $root.width }"></rect>
 								<g data-bind="attr: { transform: transform }">
@@ -55,36 +52,41 @@
 									<text text-anchor="middle" style="font-size: 8pt" data-bind="text: date"></text>
 								</g>
 							<!-- /ko -->
+							
+							<g>
+								<rect style="fill: gray" height="1" x="0" data-bind="attr: { y: cursorY, width: width }"></rect>
+								<rect style="fill: gray" width="1" y="0" data-bind="attr: { x: cursorX, height: height }"></rect>
 
-							<!-- ko foreach: chartIndicators -->
+								<!-- ko foreach: chartIndicators -->
 								<polyline style="fill:none; stroke: red; stroke-width:1" data-bind="attr: {points: points}"></polyline>
-							<!-- /ko -->
+								<!-- /ko -->
 
-							<!-- ko foreach: candles -->					
-								<g data-bind="event: { mouseover: setSelected, mouseout: setUnselected }">
-									<rect style="fill: none" data-bind="attr: { style: candleStyle, x: shadowX() - 4, height: shadowHeight, width: 10, y: shadowY }"></rect>
+								<!-- ko foreach: candles -->					
+									<g data-bind="event: { mouseover: setSelected, mouseout: setUnselected }">
+										<rect style="fill: none" data-bind="attr: { style: candleStyle, x: shadowX() - 4, height: shadowHeight, width: 10, y: shadowY }"></rect>
 
-									<rect style="fill: black" width="1" data-bind="{attr: { x: shadowX, y: shadowY, height: shadowHeight }}"></rect>
+										<rect style="fill: black" width="1" data-bind="{attr: { x: shadowX, y: shadowY, height: shadowHeight }}"></rect>
 
-									<rect data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight, width: width }}"></rect>
-								</g>
-							<!-- /ko -->
+										<rect data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight, width: width }}"></rect>
+									</g>
+								<!-- /ko -->
 
-							<!-- ko foreach: helperRects -->
-								<rect fill="rgba(255, 255, 0, 0.7)" data-bind="attr: { x: x, y: y, height: height, width: width }"></rect>
-							<!-- /ko -->
+								<!-- ko foreach: helperRects -->
+									<rect fill="rgba(255, 255, 0, 0.7)" data-bind="attr: { x: x, y: y, height: height, width: width }"></rect>
+								<!-- /ko -->
 
-							<!-- ko foreach: helperLines -->
-								<line style="stroke:rgba(0, 0, 0, 0.7); stroke-width:1" data-bind="attr: { x1: x1, y1: y1, x2: x2, y2: y2 }"></line>
-							<!-- /ko -->
+								<!-- ko foreach: helperLines -->
+									<line style="stroke:rgba(0, 0, 0, 0.7); stroke-width:1" data-bind="attr: { x1: x1, y1: y1, x2: x2, y2: y2 }"></line>
+								<!-- /ko -->
 
-							<!-- ko if: mode() == 'rect-stop' -->
-								<rect fill="rgba(255, 255, 0, 0.8)" data-bind="attr: { x: drawFirstX, y: drawFirstY, height: drawHeight, width: drawWidth }"></rect>
-							<!-- /ko -->
+								<!-- ko if: mode() == 'rect-stop' -->
+									<rect fill="rgba(255, 255, 0, 0.8)" data-bind="attr: { x: drawFirstX, y: drawFirstY, height: drawHeight, width: drawWidth }"></rect>
+								<!-- /ko -->
 
-							<!-- ko if: mode() == 'line-stop' -->
-								<line style="stroke:rgba(0,0,0, 0.8);stroke-width:1" data-bind="attr: { x1: drawFirstX, y1: drawFirstY, x2: drawSecondX, y2: drawSecondY }"></line>
-							<!-- /ko -->
+								<!-- ko if: mode() == 'line-stop' -->
+									<line style="stroke:rgba(0,0,0, 0.8);stroke-width:1" data-bind="attr: { x1: drawFirstX, y1: drawFirstY, x2: drawSecondX, y2: drawSecondY }"></line>
+								<!-- /ko -->
+							</g>
 						</svg>
 					</div>	
 				</td>

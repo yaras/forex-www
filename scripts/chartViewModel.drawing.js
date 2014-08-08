@@ -7,6 +7,14 @@ ChartViewModel.prototype.attachDrawingEvents = function() {
 		var x = event.pageX - parentOffset.left - 2;
 		var y = event.pageY - parentOffset.top - 2;
 
+		if (x > self.width) {
+			x = self.width;
+		}
+
+		if (y > self.height) {
+			y = self.height;
+		}
+
 		self.cursorX(x);
 		self.cursorY(y);
 
