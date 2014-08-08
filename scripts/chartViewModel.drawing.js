@@ -3,6 +3,10 @@ ChartViewModel.prototype.attachDrawingEvents = function() {
 
 	self.drawing = ko.observable(null);
 
+	self.helperRects = ko.observableArray();
+	self.helperLines = ko.observableArray();
+	self.helperFibo = ko.observableArray();
+
 	self.$chart.mousemove(function(event) {
 		var parentOffset = $(this).parent().offset(); 
 
@@ -79,4 +83,12 @@ ChartViewModel.prototype.drawLine = function() {
 ChartViewModel.prototype.drawFibo = function() {
 	var self = this;
 	self.mode('fibo-start');
+}
+
+ChartViewModel.prototype.clearDrawings = function() {
+	var self = this;
+
+	self.helperRects.removeAll();
+	self.helperLines.removeAll();
+	self.helperFibo.removeAll();
 }

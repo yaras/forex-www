@@ -19,14 +19,8 @@ function ChartViewModel(settings) {
 	self.cursorX = ko.observable();
 	self.cursorY = ko.observable();
 
+	//// value based on cursor position
 	self.cursorValue = ko.observable();
-
-	self.drawX = -1;
-	self.drawY = -1;
-
-	self.helperRects = ko.observableArray();
-	self.helperLines = ko.observableArray();
-	self.helperFibo = ko.observableArray();
 
 	self.max = ko.observable();
 	self.min = ko.observable();
