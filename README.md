@@ -28,4 +28,4 @@ This project will be versioning according to [semantic versioning](http://semver
 * Price Action indicators (arrows, S/R lines, trends, Fibo lines etc.)
 * Serialization and deserialization
 * Callback events (added drawing, removed drawing etc.)
-* Edition of drawings
+* Edit drawings
