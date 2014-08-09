@@ -67,7 +67,7 @@ function FiboViewModel(chart, startX, startY) {
 		self.labelXPosition(width - Constants.fiboLabelRightMargin);
 	};
 
-	self.stop = function(stopX, stopY) {
+	self.stop = function() {
 		self.chart.helperFibo.push(self);
 	};
 }

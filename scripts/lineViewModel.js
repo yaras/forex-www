@@ -14,7 +14,7 @@ function LineViewModel(chart, startX, startY) {
 		self.drawSecondY(stopY);
 	};
 
-	self.stop = function(stopX, stopY) {
+	self.stop = function() {
 		var x1 = self.drawFirstX();
 		var y1 = self.drawFirstY();
 

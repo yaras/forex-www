@@ -36,7 +36,7 @@ function RectViewModel(chart, startX, startY) {
 		}
 	};
 
-	self.stop = function(stopX, stopY) {
+	self.stop = function() {
 		var x = self.drawFirstX();
 		var y = self.drawFirstY();
 		var height = self.drawHeight();
@@ -44,4 +44,12 @@ function RectViewModel(chart, startX, startY) {
 
 		self.chart.helperRects.push({x: x, y: y, height: height, width: width});
 	};
+
+	self.serialize = function() {
+
+	};
+}
+
+RectViewModel.deserialize = function(obj) {
+
 }

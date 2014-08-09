@@ -50,7 +50,7 @@ ChartViewModel.prototype.attachDrawingEvents = function() {
 				self.drawing(new FiboViewModel(self, x, y));
 				self.mode('stop');
 			} else if (self.mode() == 'stop') {
-				self.drawing().stop(x, y);
+				self.drawing().stop();
 				self.cancelDrawing();
 			}
 		}
