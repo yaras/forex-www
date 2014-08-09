@@ -10,6 +10,7 @@
 
 		<script type="text/javascript" src="scripts/helpers.js"></script>
 		<script type="text/javascript" src="scripts/candles.js"></script>
+		
 		<script type="text/javascript" src="scripts/chartViewModel.js"></script>
 		<script type="text/javascript" src="scripts/candleViewModel.js"></script>
 		<script type="text/javascript" src="scripts/chartViewModel.drawing.js"></script>
@@ -138,7 +139,7 @@
 
 				<td>
 					<div data-bind="if: selected">
-						date: <span data-bind="text: selected().date"></span>
+						date: <span data-bind="text: selected().dateFormatted"></span>
 						<br />
 						open: <span data-bind="text: selected().open"></span>
 						<br />
@@ -150,7 +151,13 @@
 					</div>
 
 					<br />
+					time id: <span data-bind="text: cursorTimeId()"></span>
+
+					<br />
 					value: <span data-bind="text: cursorValue()"></span>
+
+					<br />
+					x,y: <span data-bind="text: cursorX()"></span>, <span data-bind="text: cursorY()"></span>
 				</td>
 			</tr>
 		</table>

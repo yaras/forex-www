@@ -31,11 +31,12 @@ var Helpers = function() {
 var Dates = function() {
 	var pub = {};
 
-	pub.parse = function(d) {
-		return new Date(Date.parse(d.replace(' ', 'T')));
-	};
-
 	pub.format = function(d, resolution) {
+		if (resolution == undefined) {
+			return d.getFullYear() + '-' + Helpers.pad(d.getMonth()+1, 2) + '-' + Helpers.pad(d.getDate(), 2)
+				+ ' ' + Helpers.pad(d.getHours(), 2) + ':' + Helpers.pad(d.getMinutes(), 2);
+		}
+
 		switch (resolution) {
 			case '1D':
 				return d.getFullYear() + '-' + Helpers.pad(d.getMonth()+1, 2) + '-' + Helpers.pad(d.getDate(), 2);

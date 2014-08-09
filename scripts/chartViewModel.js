@@ -1,7 +1,12 @@
 function ChartViewModel(settings) {
 	var self = this;
 
-	self.settings = $.extend({}, {}, settings);
+	self.settings = $.extend({}, {
+		'element': '.chart',
+		'resolution': '1D',
+		'height': 500,
+		'width': 800
+	}, settings);
 
 	//// chart resolution
 	self.resolution = self.settings.resolution;
@@ -21,6 +26,9 @@ function ChartViewModel(settings) {
 
 	//// value based on cursor position
 	self.cursorValue = ko.observable();
+
+	//// time id based on cursor position
+	self.cursorTimeId = ko.observable();
 
 	self.max = ko.observable();
 	self.min = ko.observable();
@@ -59,14 +67,22 @@ function ChartViewModel(settings) {
 		self.min(local_min);
 		self.max(local_max);
 
-		//// pixel per pip
-		self.f = self.height / (self.max() - self.min())
+		self.calcValueCoefficients();
 
 		var path = [];
 
+		//// horizontal axe
 		for (i = 0; i <= candles.length - 1; i++) {
-			var c = new CandleViewModel(self, i+1, candles[i][0], candles[i][1], candles[i][2], candles[i][3], candles[i][4]);
+			var c = new CandleViewModel(self, i + 1, candles[i]);
 			self.candles.push(c);
+
+			if (i == 0) {
+				self.startTimeId = c.timeId;
+				self.startPosition = c.shadowX();
+			} else if (i == candles.length - 1) {
+				self.endTimeId = c.timeId;
+				self.endPosition = c.shadowX();
+			}
 
 			if (i % 8 == 0) {
 				var x = Constants.candleWidth * (i+1);
@@ -75,15 +91,18 @@ function ChartViewModel(settings) {
 				var date = '';
 
 				if (i > 0) {
-					date = Dates.format(Dates.parse(candles[i][4]), self.resolution);
+					date = Dates.format(new Date(c.date), self.resolution);
 				}
 
 				self.horizontalAxe.push({ x: x, transform: t, date: date });
 			}
 
-			path.push((Constants.candleWidth * (i + 1)) + ',' + (self.f * (self.max() - candles[i][1])));
+			path.push((Constants.candleWidth * (i + 1)) + ',' + (self.f * (self.max() - c.high())));
 		}
 
+		self.calcTimeIdCoefficients();
+
+		//// dummy path as prove of concept
 		self.chartIndicators.push({points: path.join(' ')});
 
 		var step = (self.max() - self.min()) / Constants.verticalStripesCount;
@@ -94,5 +113,43 @@ function ChartViewModel(settings) {
 
 			self.verticalAxe.push({ value: i.toFixed(4), y: y, transform: t });
 		}
-	}
+	};
+
+	self.calcValueCoefficients = function() {
+		//// pixel per pip
+		self.f = self.height / (self.max() - self.min());
+	};
+
+	self.calcTimeIdCoefficients = function() {
+		//// position coefficient
+		self.x = (self.endTimeId - self.startTimeId) / (self.endPosition - self.startPosition);
+
+		//// zero position component
+		self.q = self.startTimeId - self.startPosition * self.x;
+	};
+
+	self.calcTimeIdFromPosition = function(p) {
+		/*
+			d(p) = p*x + q
+
+			d(p) - time id of point p
+			p - point on chart
+			x - position coefficient
+			q - zero position component
+		*/
+
+		return p * self.x + self.q;
+	};
+
+	self.calcPositionFromTimeId = function(d) {
+		return (d - self.q) / self.x;
+	};
+
+	self.calcValueFromPosition = function(p) {
+		return self.min() + (self.height - p) / self.f;
+	};
+
+	self.calcPositionFromValue = function(d) {
+		return self.height - self.f * (d - self.min());
+	};
 }

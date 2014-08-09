@@ -1,15 +1,18 @@
-function CandleViewModel(chart, position, open, high, low, close, date) {
+function CandleViewModel(chart, position, c) {
 	var self = this;
 	self.chart = chart;
 
-	self.date = date;
+	self.date = c[4];
+	self.timeId = c[5];
 
-	self.open = ko.observable(open);
-	self.close = ko.observable(close);
-	self.high = ko.observable(high);
-	self.low = ko.observable(low);
+	self.open = ko.observable(c[0]);
+	self.high = ko.observable(c[1]);
+	self.low = ko.observable(c[2]);
+	self.close = ko.observable(c[3]);
 
-	self.height = ko.observable(high - low);
+	self.dateFormatted = Dates.format(new Date(self.date));
+
+	self.height = ko.observable(self.high - self.low);
 	self.width = ko.observable(Constants.candleBodyWidth);
 
 	self.shadowX = ko.observable(Constants.candleWidth * position);

@@ -24,9 +24,8 @@ ChartViewModel.prototype.attachDrawingEvents = function() {
 		self.cursorX(x);
 		self.cursorY(y);
 
-		var v = self.min() + (self.height - y) / self.f;
-
-		self.cursorValue(Helpers.round(v, 4));
+		self.cursorValue(Helpers.round(self.calcValueFromPosition(y), 4));
+		self.cursorTimeId(self.calcDateFromPosition(x));
 
 		if (self.drawing() != null) {
 			self.drawing().updatePosition(x, y);
