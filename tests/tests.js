@@ -1,3 +1,15 @@
+function assertDeltaEqual(assert, a, b, delta) {
+	delta = delta || 0.0001;
+
+	var diff = a - b;
+
+	if (diff < 0) {
+		diff = -diff;
+	}
+
+	assert.ok(diff < delta, a + ' vs. ' + b);
+};
+
 QUnit.module('initialization');
 
 QUnit.test("hello test", function( assert ) {
@@ -112,4 +124,115 @@ QUnit.test("Calc position from time id", function( assert ) {
 
 	assert.equal(chart.calcPositionFromTimeId(32), 330);
 	assert.equal(chart.calcPositionFromTimeId(61.1), 621);
+});
+
+QUnit.test("Rect serialization/deserialization", function( assert ) {
+	var chart = new ChartViewModel({});
+
+	chart.height = 500;
+	chart.min(1.2746);
+	chart.max(1.371);
+	chart.calcValueCoefficients();
+
+	chart.startTimeId = 0;
+	chart.endTimeId = 79;
+	chart.startPosition = 10;
+	chart.endPosition = 800;
+	chart.calcTimeIdCoefficients();
+
+	var rect = new RectViewModel(chart, 200, 300);
+	rect.updatePosition(300, 450);
+
+	assert.equal(rect.drawFirstX(), 200);
+	assert.equal(rect.drawFirstY(), 300);
+	assert.equal(rect.drawWidth(), 100);
+	assert.equal(rect.drawHeight(), 150);
+
+	var serialized = rect.serialize();
+
+	assert.equal(serialized.x1, 19);
+	assert.equal(serialized.y1, 1.3131599999999999);
+	assert.equal(serialized.x2, 29);
+	assert.equal(serialized.y2, 1.28424);
+
+	var deserializedRect = RectViewModel.deserialize(chart, serialized);
+
+	assert.equal(deserializedRect.drawFirstX(), 200);
+	assertDeltaEqual(assert, deserializedRect.drawFirstY(), 300);
+	assertDeltaEqual(assert, deserializedRect.drawWidth(), 100);
+	assertDeltaEqual(assert, deserializedRect.drawHeight(), 150);
+});
+
+QUnit.test("Line serialization/deserialization", function( assert ) {
+	var chart = new ChartViewModel({});
+
+	chart.height = 500;
+	chart.min(1.2746);
+	chart.max(1.371);
+	chart.calcValueCoefficients();
+
+	chart.startTimeId = 0;
+	chart.endTimeId = 79;
+	chart.startPosition = 10;
+	chart.endPosition = 800;
+	chart.calcTimeIdCoefficients();
+
+	var rect = new LineViewModel(chart, 200, 300);
+	rect.updatePosition(300, 450);
+
+	assert.equal(rect.drawFirstX(), 200);
+	assert.equal(rect.drawFirstY(), 300);
+	assert.equal(rect.drawSecondX(), 300);
+	assert.equal(rect.drawSecondY(), 450);
+
+	var serialized = rect.serialize();
+
+	assert.equal(serialized.x1, 19);
+	assert.equal(serialized.y1, 1.3131599999999999);
+	assert.equal(serialized.x2, 29);
+	assert.equal(serialized.y2, 1.28424);
+
+	var deserializedRect = LineViewModel.deserialize(chart, serialized);
+
+	assertDeltaEqual(assert, deserializedRect.drawFirstX(), 200);
+	assertDeltaEqual(assert, deserializedRect.drawFirstY(), 300);
+	assertDeltaEqual(assert, deserializedRect.drawSecondX(), 300);
+	assertDeltaEqual(assert, deserializedRect.drawSecondY(), 450);
+});
+
+QUnit.test("Fibo serialization/deserialization", function( assert ) {
+	var chart = new ChartViewModel({});
+
+	chart.height = 500;
+	chart.min(1.2746);
+	chart.max(1.371);
+	chart.calcValueCoefficients();
+
+	chart.startTimeId = 0;
+	chart.endTimeId = 79;
+	chart.startPosition = 10;
+	chart.endPosition = 800;
+	chart.calcTimeIdCoefficients();
+
+	var rect = new FiboViewModel(chart, 200, 300);
+	rect.updatePosition(300, 450);
+
+	assert.equal(rect.startX, 200);
+	assert.equal(rect.startY, 300);
+	assert.equal(rect.stopX, 300);
+	assert.equal(rect.stopY, 450);
+
+	var serialized = rect.serialize();
+
+	assert.equal(serialized.x1, 19);
+	assert.equal(serialized.y1, 1.3131599999999999);
+	assert.equal(serialized.x2, 29);
+	assert.equal(serialized.y2, 1.28424);
+
+	var deserializedRect = FiboViewModel.deserialize(chart, serialized);
+
+	assertDeltaEqual(assert, deserializedRect.startX, 200);
+	assertDeltaEqual(assert, deserializedRect.startY, 300);
+	assertDeltaEqual(assert, deserializedRect.stopX, 300);
+	assertDeltaEqual(assert, deserializedRect.stopY, 450);
 });

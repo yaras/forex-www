@@ -65,7 +65,7 @@
 								<polyline style="fill:none; stroke: red; stroke-width:1" data-bind="attr: {points: points}"></polyline>
 								<!-- /ko -->
 
-								<!-- ko foreach: candles -->					
+								<!-- ko foreach: candles -->
 									<g data-bind="event: { mouseover: setSelected, mouseout: setUnselected }">
 										<rect style="fill: none" data-bind="attr: { style: candleStyle, x: bodyX()-1, height: shadowHeight, width: width() + 2, y: shadowY }"></rect>
 
@@ -76,11 +76,11 @@
 								<!-- /ko -->
 
 								<!-- ko foreach: helperRects -->
-									<rect fill="rgba(255, 255, 0, 0.7)" data-bind="attr: { x: x, y: y, height: height, width: width }"></rect>
+									<rect fill="rgba(255, 255, 0, 0.7)" data-bind="attr: { x: drawFirstX, y: drawFirstY, height: drawHeight, width: drawWidth }"></rect>
 								<!-- /ko -->
 
 								<!-- ko foreach: helperLines -->
-									<line style="stroke:rgba(0, 0, 0, 0.7); stroke-width:1" data-bind="attr: { x1: x1, y1: y1, x2: x2, y2: y2 }"></line>
+									<line style="stroke:rgba(0, 0, 0, 0.7); stroke-width:1" data-bind="attr: { x1: drawFirstX, y1: drawFirstY, x2: drawSecondX, y2: drawSecondY }"></line>
 								<!-- /ko -->
 
 								<!-- ko foreach: helperFibo -->
@@ -166,5 +166,7 @@
 		<button data-bind="click: drawLine">Draw line</button>
 		<button data-bind="click: drawFibo">Draw fibo</button>
 		<button data-bind="click: clearDrawings">Clear all drawings</button>
+		<button data-bind="click: serialize">Serialize</button>
+		<button data-bind="click: deserializeFromJson">Deserialize</button>
 	</body>
 </html>

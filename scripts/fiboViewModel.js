@@ -6,6 +6,9 @@ function FiboViewModel(chart, startX, startY) {
 	self.startX = startX;
 	self.startY = startY;
 
+	self.stopX = -1;
+	self.stopY = -1;
+
 	self.transform = ko.observable();
 	
 	self.width = ko.observable();
@@ -25,13 +28,16 @@ function FiboViewModel(chart, startX, startY) {
 		var x = 0;
 		var y = 0;
 
+		self.stopX = stopX;
+		self.stopY = stopY;
+
 		var width = stopX - self.startX;
 
 		if (width > 0) {
 			x = self.startX;
 		} else {
-			width = -width;
 			x = stopX;
+			width = -width;
 		}
 
 		var height = stopY - self.startY;
@@ -48,8 +54,8 @@ function FiboViewModel(chart, startX, startY) {
 			self.level100(height);
 
 		} else {
-			height = -height;
 			y = stopY;
+			height = -height;
 
 			self.level0(height);
 			self.level23(0.79 * height);
@@ -70,4 +76,20 @@ function FiboViewModel(chart, startX, startY) {
 	self.stop = function() {
 		self.chart.helperFibo.push(self);
 	};
+
+	self.serialize = function() {
+		return {
+			'x1': self.chart.calcTimeIdFromPosition(self.startX),
+			'y1': self.chart.calcValueFromPosition(self.startY),
+			'x2': self.chart.calcTimeIdFromPosition(self.stopX),
+			'y2': self.chart.calcValueFromPosition(self.stopY)
+		}
+	};
+}
+
+FiboViewModel.deserialize = function(chart, obj) {
+	var r = new FiboViewModel(chart, chart.calcPositionFromTimeId(obj['x1']), chart.calcPositionFromValue(obj['y1']));
+	r.updatePosition(chart.calcPositionFromTimeId(obj['x2']), chart.calcPositionFromValue(obj['y2']));
+
+	return r;
 }

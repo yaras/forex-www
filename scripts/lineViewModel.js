@@ -21,6 +21,22 @@ function LineViewModel(chart, startX, startY) {
 		var x2 = self.drawSecondX();
 		var y2 = self.drawSecondY();
 
-		self.chart.helperLines.push({ 'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2 });
+		self.chart.helperLines.push(self);
 	};
+
+	self.serialize = function() {
+		return {
+			'x1': self.chart.calcTimeIdFromPosition(self.drawFirstX()),
+			'y1': self.chart.calcValueFromPosition(self.drawFirstY()),
+			'x2': self.chart.calcTimeIdFromPosition(self.drawSecondX()),
+			'y2': self.chart.calcValueFromPosition(self.drawSecondY())
+		}
+	};
+}
+
+LineViewModel.deserialize = function(chart, obj) {
+	var r = new LineViewModel(chart, chart.calcPositionFromTimeId(obj['x1']), chart.calcPositionFromValue(obj['y1']));
+	r.updatePosition(chart.calcPositionFromTimeId(obj['x2']), chart.calcPositionFromValue(obj['y2']));
+
+	return r;
 }
