@@ -84,7 +84,7 @@ function ChartViewModel(settings) {
 				self.endPosition = c.shadowX();
 			}
 
-			if (i % 8 == 0) {
+			if (i % Constants.verticalLineCandles == 0) {
 				var x = Constants.candleWidth * (i+1);
 				var t = 'translate(' + x + ', ' + (self.height + Constants.chartHeightMargin/2) + ')';
 

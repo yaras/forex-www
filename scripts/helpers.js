@@ -1,11 +1,12 @@
 var Constants = function() {
 	return {
-		'candleWidth': 10,
-		'candleBodyWidth': 5,
+		'candleWidth': 6,
+		'candleBodyWidth': 3,
 		'chartHeightMargin': 30,
 		'chartWidthMargin': 50,
 		'verticalStripesCount': 30,
-		'fiboLabelRightMargin': 30
+		'fiboLabelRightMargin': 30,
+		'verticalLineCandles': 14
 	};
 }();
 

@@ -67,7 +67,7 @@
 
 								<!-- ko foreach: candles -->					
 									<g data-bind="event: { mouseover: setSelected, mouseout: setUnselected }">
-										<rect style="fill: none" data-bind="attr: { style: candleStyle, x: shadowX() - 4, height: shadowHeight, width: 10, y: shadowY }"></rect>
+										<rect style="fill: none" data-bind="attr: { style: candleStyle, x: bodyX()-1, height: shadowHeight, width: width() + 2, y: shadowY }"></rect>
 
 										<rect style="fill: black" width="1" data-bind="{attr: { x: shadowX, y: shadowY, height: shadowHeight }}"></rect>
 
