@@ -9,7 +9,7 @@ Read more and view **demo** on [github.io](http://yaras.github.com/forex-www)
 
 As for now project is in very early stage of development and it should not be used in production environment.
 
-## Licence
+## License
 
 Forex-www is licensed under [MIT](http://opensource.org/licenses/MIT)
 
