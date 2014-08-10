@@ -77,7 +77,7 @@ QUnit.test("Calc position from value", function( assert ) {
 	assert.equal(chart.calcPositionFromValue(1.3228), 250);
 	assert.equal(chart.calcPositionFromValue(1.2746), 500);
 	assert.equal(chart.calcPositionFromValue(1.371), 0);
-	assert.equal(Math.round(chart.calcPositionFromValue(1.3278)), 224); //// some little error
+	assertDeltaEqual(assert, chart.calcPositionFromValue(1.3278), 224, 0.1);
 });
 
 QUnit.test("Calc time id from position", function( assert ) {
@@ -97,7 +97,7 @@ QUnit.test("Calc time id from position", function( assert ) {
 	assert.equal(chart.calcTimeIdFromPosition(10), chart.startTimeId);
 	assert.equal(chart.calcTimeIdFromPosition(800), chart.endTimeId);
 
-	assert.equal(Math.round(chart.calcPositionFromTimeId(chart.calcTimeIdFromPosition(323))), 323);
+	assertDeltaEqual(assert, chart.calcPositionFromTimeId(chart.calcTimeIdFromPosition(323)), 323);
 
 	assert.equal(chart.calcTimeIdFromPosition(330), 32);
 	assert.equal(chart.calcTimeIdFromPosition(621), 61.1);
@@ -117,10 +117,10 @@ QUnit.test("Calc position from time id", function( assert ) {
 	assert.equal(chart.x, 0.1);
 	assert.equal(chart.q, -1);
 
-	assert.equal(Math.round(chart.calcPositionFromTimeId(chart.startTimeId)), 10);
-	assert.equal(Math.round(chart.calcPositionFromTimeId(chart.endTimeId)), 800);
+	assertDeltaEqual(assert, chart.calcPositionFromTimeId(chart.startTimeId), 10);
+	assertDeltaEqual(assert, chart.calcPositionFromTimeId(chart.endTimeId), 800);
 
-	assert.equal(Math.round(chart.calcTimeIdFromPosition(chart.calcPositionFromTimeId(1399027600000))), 1399027600000);
+	assertDeltaEqual(assert, chart.calcTimeIdFromPosition(chart.calcPositionFromTimeId(1399027600000)), 1399027600000);
 
 	assert.equal(chart.calcPositionFromTimeId(32), 330);
 	assert.equal(chart.calcPositionFromTimeId(61.1), 621);
