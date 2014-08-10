@@ -195,7 +195,7 @@
               </tr>
               <tr>
                 <td>
-                  <span data-bind="text: selected().date"></span>
+                  <span data-bind="text: selected().dateFormatted"></span>
                 </td>
                 
                 <td>
@@ -203,19 +203,19 @@
                 </td>
 
                 <td>
-                  <span data-bind="text: selected().open">
+                  <span data-bind="text: Helpers.round(selected().open(), 4)">
                 </td>
 
                 <td>
-                  <span data-bind="text: selected().high">
+                  <span data-bind="text: Helpers.round(selected().high(), 4)">
                 </td>
 
                 <td>
-                  <span data-bind="text: selected().low">
+                  <span data-bind="text: Helpers.round(selected().low(), 4)">
                 </td>
 
                 <td>
-                  <span data-bind="text: selected().close">
+                  <span data-bind="text: Helpers.round(selected().close(), 4)">
                 </td>
               </tr>
             </table>
