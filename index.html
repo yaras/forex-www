@@ -81,105 +81,107 @@
           <button data-bind="click: drawLine">Draw line</button>
           <button data-bind="click: drawFibo">Draw fibo</button>
           <button data-bind="click: clearDrawings">Clear</button>
+          <button data-bind="click: serialize">Serialize</button>
+          <button data-bind="click: deserializeFromJson">Deserialize</button>
 
           <br /><br />
 
-              <div>
-                <div class="chart" data-bind="css: { 'drawing': mode() != 'none' }, attr: {height: heightWithMargin, width: widthWithMargin}">
-                  <svg data-bind="attr: {height: heightWithMargin, width: widthWithMargin}">
-                    <!-- ko foreach: verticalAxe -->
-                      <rect style="fill: #ddd" x="0" height="1" data-bind="attr: { y: y, width: $root.width }"></rect>
-                      <g data-bind="attr: { transform: transform }">
-                        <text style="font-size: 8pt" data-bind="text: value"></text>
-                      </g>
-                    <!-- /ko -->
+          <div>
+            <div class="chart" data-bind="css: { 'drawing': mode() != 'none' }, attr: {height: heightWithMargin, width: widthWithMargin}">
+            <svg data-bind="attr: {height: heightWithMargin, width: widthWithMargin}">
+              <!-- ko foreach: verticalAxe -->
+                <rect style="fill: #ddd" x="0" height="1" data-bind="attr: { y: y, width: $root.width }"></rect>
+                <g data-bind="attr: { transform: transform }">
+                  <text style="font-size: 8pt" data-bind="text: value"></text>
+                </g>
+              <!-- /ko -->
 
-                    <!-- ko foreach: horizontalAxe -->
-                      <rect style="fill: #ddd" y="0" width="1" data-bind="attr: { x: x, height: $root.height }"></rect>
-                      <g data-bind="attr: { transform: transform }">
-                        <text text-anchor="middle" style="font-size: 8pt" data-bind="text: date"></text>
-                      </g>
-                    <!-- /ko -->
+              <!-- ko foreach: horizontalAxe -->
+                <rect style="fill: #ddd" y="0" width="1" data-bind="attr: { x: x, height: $root.height }"></rect>
+                <g data-bind="attr: { transform: transform }">
+                  <text text-anchor="middle" style="font-size: 8pt" data-bind="text: date"></text>
+                </g>
+              <!-- /ko -->
 
-                    <g>
-                      <rect style="fill: gray" height="1" x="0" data-bind="attr: { y: cursorY, width: width }"></rect>
-                      <rect style="fill: gray" width="1" y="0" data-bind="attr: { x: cursorX, height: height }"></rect>
+              <g>
+                <rect style="fill: gray" height="1" x="0" data-bind="attr: { y: cursorY, width: width }"></rect>
+                <rect style="fill: gray" width="1" y="0" data-bind="attr: { x: cursorX, height: height }"></rect>
 
-                      <!-- ko foreach: chartIndicators -->
-                      <polyline style="fill:none; stroke: red; stroke-width:1" data-bind="attr: {points: points}"></polyline>
-                      <!-- /ko -->
+                <!-- ko foreach: chartIndicators -->
+                <polyline style="fill:none; stroke: red; stroke-width:1" data-bind="attr: {points: points}"></polyline>
+                <!-- /ko -->
 
-                      <!-- ko foreach: candles -->          
-                        <g data-bind="event: { mouseover: setSelected, mouseout: setUnselected }">
-                          <rect style="fill: none" data-bind="attr: { style: candleStyle, x: shadowX() - 4, height: shadowHeight, width: 10, y: shadowY }"></rect>
+                <!-- ko foreach: candles -->
+                  <g data-bind="event: { mouseover: setSelected, mouseout: setUnselected }">
+                    <rect style="fill: none" data-bind="attr: { style: candleStyle, x: bodyX()-1, height: shadowHeight, width: width() + 2, y: shadowY }"></rect>
 
-                          <rect style="fill: black" width="1" data-bind="{attr: { x: shadowX, y: shadowY, height: shadowHeight }}"></rect>
+                    <rect style="fill: black" width="1" data-bind="{attr: { x: shadowX, y: shadowY, height: shadowHeight }}"></rect>
 
-                          <rect data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight, width: width }}"></rect>
-                        </g>
-                      <!-- /ko -->
+                    <rect data-bind="{attr: { style: bodyStyle, x: bodyX, y: bodyY, height: bodyHeight, width: width }}"></rect>
+                  </g>
+                <!-- /ko -->
 
-                      <!-- ko foreach: helperRects -->
-                        <rect fill="rgba(255, 255, 0, 0.7)" data-bind="attr: { x: x, y: y, height: height, width: width }"></rect>
-                      <!-- /ko -->
+                <!-- ko foreach: helperRects -->
+                  <rect fill="rgba(255, 255, 0, 0.7)" data-bind="attr: { x: drawFirstX, y: drawFirstY, height: drawHeight, width: drawWidth }"></rect>
+                <!-- /ko -->
 
-                      <!-- ko foreach: helperLines -->
-                        <line style="stroke:rgba(0, 0, 0, 0.7); stroke-width:1" data-bind="attr: { x1: x1, y1: y1, x2: x2, y2: y2 }"></line>
-                      <!-- /ko -->
+                <!-- ko foreach: helperLines -->
+                  <line style="stroke:rgba(0, 0, 0, 0.7); stroke-width:1" data-bind="attr: { x1: drawFirstX, y1: drawFirstY, x2: drawSecondX, y2: drawSecondY }"></line>
+                <!-- /ko -->
 
-                      <!-- ko foreach: helperFibo -->
-                        <g data-bind="attr: { transform: transform }">
-                          <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y: level0 }" ></rect>
-                          <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level23 }"></rect>
-                          <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level38 }"></rect>
-                          <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level50 }"></rect>
-                          <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level62 }"></rect>
-                          <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level79 }"></rect>
-                          <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level100 }"></rect>
+                <!-- ko foreach: helperFibo -->
+                  <g data-bind="attr: { transform: transform }">
+                    <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y: level0 }" ></rect>
+                    <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level23 }"></rect>
+                    <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level38 }"></rect>
+                    <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level50 }"></rect>
+                    <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level62 }"></rect>
+                    <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level79 }"></rect>
+                    <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: width, y:level100 }"></rect>
 
-                          <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y: level0 }">0%</text>
-                          <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level23 }">23%</text>
-                          <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level38 }">38%</text>
-                          <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level50 }">50%</text>
-                          <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level62 }">62%</text>
-                          <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level79 }">79%</text>
-                          <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level100 }">100%</text>
-                        </g>
-                      <!-- /ko -->
+                    <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y: level0 }">0%</text>
+                    <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level23 }">23%</text>
+                    <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level38 }">38%</text>
+                    <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level50 }">50%</text>
+                    <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level62 }">62%</text>
+                    <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level79 }">79%</text>
+                    <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: width, x: labelXPosition, y:level100 }">100%</text>
+                  </g>
+                <!-- /ko -->
 
-                      <!-- ko if: drawing() != null -->
-                        <!-- ko if: drawing() instanceof RectViewModel -->
-                          <rect fill="rgba(255, 255, 0, 0.8)" data-bind="attr: { x: drawing().drawFirstX, y: drawing().drawFirstY, height: drawing().drawHeight, width: drawing().drawWidth }"></rect>
-                        <!-- /ko -->
+                <!-- ko if: drawing() != null -->
+                  <!-- ko if: drawing() instanceof RectViewModel -->
+                    <rect fill="rgba(255, 255, 0, 0.8)" data-bind="attr: { x: drawing().drawFirstX, y: drawing().drawFirstY, height: drawing().drawHeight, width: drawing().drawWidth }"></rect>
+                  <!-- /ko -->
 
-                        <!-- ko if: drawing() instanceof LineViewModel -->
-                          <line style="stroke:rgba(0,0,0, 0.8);stroke-width:1" data-bind="attr: { x1: drawing().drawFirstX, y1: drawing().drawFirstY, x2: drawing().drawSecondX, y2: drawing().drawSecondY }"></line>
-                        <!-- /ko -->
+                  <!-- ko if: drawing() instanceof LineViewModel -->
+                    <line style="stroke:rgba(0,0,0, 0.8);stroke-width:1" data-bind="attr: { x1: drawing().drawFirstX, y1: drawing().drawFirstY, x2: drawing().drawSecondX, y2: drawing().drawSecondY }"></line>
+                  <!-- /ko -->
 
-                        <!-- ko if: drawing() instanceof FiboViewModel -->
-                          <g data-bind="attr: { transform: drawing().transform }">
-                            <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y: drawing().level0 }" ></rect>
-                            <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level23 }"></rect>
-                            <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level38 }"></rect>
-                            <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level50 }"></rect>
-                            <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level62 }"></rect>
-                            <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level79 }"></rect>
-                            <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level100 }"></rect>
+                  <!-- ko if: drawing() instanceof FiboViewModel -->
+                    <g data-bind="attr: { transform: drawing().transform }">
+                      <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y: drawing().level0 }" ></rect>
+                      <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level23 }"></rect>
+                      <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level38 }"></rect>
+                      <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level50 }"></rect>
+                      <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level62 }"></rect>
+                      <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level79 }"></rect>
+                      <rect x="0" height="1" style="fill: gray" data-bind="attr: { width: drawing().width, y:drawing().level100 }"></rect>
 
-                            <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y: drawing().level0 }">0%</text>
-                            <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level23 }">23%</text>
-                            <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level38 }">38%</text>
-                            <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level50 }">50%</text>
-                            <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level62 }">62%</text>
-                            <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level79 }">79%</text>
-                            <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level100 }">100%</text>
-                          </g>
-                        <!-- /ko -->
-                      <!-- /ko -->
+                      <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y: drawing().level0 }">0%</text>
+                      <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level23 }">23%</text>
+                      <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level38 }">38%</text>
+                      <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level50 }">50%</text>
+                      <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level62 }">62%</text>
+                      <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level79 }">79%</text>
+                      <text text-anchor="right" style="font-size: 8pt" data-bind="attr: { width: drawing().width, x: drawing().labelXPosition, y:drawing().level100 }">100%</text>
                     </g>
-                  </svg>
-                </div>
-              </div>
+                  <!-- /ko -->
+                <!-- /ko -->
+              </g>
+            </svg>
+          </div>
+          </div>
 
           <div data-bind="if: selected">
             <table>

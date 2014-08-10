@@ -24,9 +24,8 @@ ChartViewModel.prototype.attachDrawingEvents = function() {
 		self.cursorX(x);
 		self.cursorY(y);
 
-		var v = self.min() + (self.height - y) / self.f;
-
-		self.cursorValue(Helpers.round(v, 4));
+		self.cursorValue(Helpers.round(self.calcValueFromPosition(y), 4));
+		self.cursorTimeId(self.calcTimeIdFromPosition(x));
 
 		if (self.drawing() != null) {
 			self.drawing().updatePosition(x, y);
@@ -50,7 +49,7 @@ ChartViewModel.prototype.attachDrawingEvents = function() {
 				self.drawing(new FiboViewModel(self, x, y));
 				self.mode('stop');
 			} else if (self.mode() == 'stop') {
-				self.drawing().stop(x, y);
+				self.drawing().stop();
 				self.cancelDrawing();
 			}
 		}
@@ -91,4 +90,67 @@ ChartViewModel.prototype.clearDrawings = function() {
 	self.helperRects.removeAll();
 	self.helperLines.removeAll();
 	self.helperFibo.removeAll();
+}
+
+ChartViewModel.prototype.serializeHelpers = function() {
+	var self = this;
+
+	var serialized = {
+		'rects': [],
+		'lines': [],
+		'fibos': []
+	};
+
+	$.each(self.helperRects(), function(i, rect) {
+		serialized.rects.push(rect.serialize());
+	});
+
+	$.each(self.helperLines(), function(i, line) {
+		serialized.lines.push(line.serialize());
+	});
+
+	$.each(self.helperFibo(), function(i, fibo) {
+		serialized.fibos.push(fibo.serialize());
+	});
+
+	return serialized;
+}
+
+ChartViewModel.prototype.deserializeHelpers = function(obj) {
+	var self = this;
+
+	self.helperRects.removeAll();
+
+	if (obj.rects != undefined) {
+		$.each(obj.rects, function(i, rect) {
+			self.helperRects.push(RectViewModel.deserialize(self, rect));
+		});
+	}
+
+	if (obj.lines != undefined) {
+		$.each(obj.lines, function(i, line) {
+			self.helperLines.push(LineViewModel.deserialize(self, line));
+		});
+	}
+
+	if (obj.fibos != undefined) {
+		$.each(obj.fibos, function(i, fibo) {
+			self.helperFibo.push(FiboViewModel.deserialize(self, fibo));
+		});
+	}
+}
+
+ChartViewModel.prototype.serialize = function() {
+	var self = this;
+	alert(ko.toJSON(self.serializeHelpers()));
+}
+
+ChartViewModel.prototype.deserializeFromJson = function() {
+	var self = this;
+
+	var s = prompt("Insert serialized helpers", '');
+
+	if (s != null) {
+		self.deserializeHelpers($.parseJSON(s));
+	}
 }

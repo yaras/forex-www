@@ -36,12 +36,23 @@ function RectViewModel(chart, startX, startY) {
 		}
 	};
 
-	self.stop = function(stopX, stopY) {
-		var x = self.drawFirstX();
-		var y = self.drawFirstY();
-		var height = self.drawHeight();
-		var width = self.drawWidth();
-
-		self.chart.helperRects.push({x: x, y: y, height: height, width: width});
+	self.stop = function() {
+		self.chart.helperRects.push(self);
 	};
+
+	self.serialize = function() {
+		return {
+			'x1': self.chart.calcTimeIdFromPosition(self.drawFirstX()),
+			'y1': self.chart.calcValueFromPosition(self.drawFirstY()),
+			'x2': self.chart.calcTimeIdFromPosition(self.drawFirstX() + self.drawWidth()),
+			'y2': self.chart.calcValueFromPosition(self.drawFirstY() + self.drawHeight())
+		}
+	};
+}
+
+RectViewModel.deserialize = function(chart, obj) {
+	var r = new RectViewModel(chart, chart.calcPositionFromTimeId(obj['x1']), chart.calcPositionFromValue(obj['y1']));
+	r.updatePosition(chart.calcPositionFromTimeId(obj['x2']), chart.calcPositionFromValue(obj['y2']));	
+
+	return r;
 }

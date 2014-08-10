@@ -1,11 +1,12 @@
 var Constants = function() {
 	return {
-		'candleWidth': 10,
-		'candleBodyWidth': 5,
+		'candleWidth': 6,
+		'candleBodyWidth': 3,
 		'chartHeightMargin': 30,
 		'chartWidthMargin': 50,
-		'verticalStripesCount': 20,
-		'fiboLabelRightMargin': 30
+		'verticalStripesCount': 30,
+		'fiboLabelRightMargin': 30,
+		'verticalLineCandles': 14
 	};
 }();
 
@@ -31,11 +32,12 @@ var Helpers = function() {
 var Dates = function() {
 	var pub = {};
 
-	pub.parse = function(d) {
-		return new Date(Date.parse(d.replace(' ', 'T')));
-	};
-
 	pub.format = function(d, resolution) {
+		if (resolution == undefined) {
+			return d.getFullYear() + '-' + Helpers.pad(d.getMonth()+1, 2) + '-' + Helpers.pad(d.getDate(), 2)
+				+ ' ' + Helpers.pad(d.getHours(), 2) + ':' + Helpers.pad(d.getMinutes(), 2);
+		}
+
 		switch (resolution) {
 			case '1D':
 				return d.getFullYear() + '-' + Helpers.pad(d.getMonth()+1, 2) + '-' + Helpers.pad(d.getDate(), 2);
