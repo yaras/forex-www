@@ -4,7 +4,7 @@ var Constants = function() {
 		'candleBodyWidth': 3,
 		'chartHeightMargin': 30,
 		'chartWidthMargin': 50,
-		'verticalStripesCount': 30,
+		'verticalStripesCount': 16,
 		'fiboLabelRightMargin': 30,
 		'verticalLineCandles': 14
 	};
